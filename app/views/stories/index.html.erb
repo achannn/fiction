@@ -1,0 +1,9 @@
+<h1>Fiction.party</h1>
+<h2>Stories</h2>
+<ul>
+  <% @stories.each do |story| %>
+    <li>
+      <%= link_to story.title, story_path(story)%>
+    </li>
+  <% end %>
+</ul>

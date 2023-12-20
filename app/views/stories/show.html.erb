@@ -1,0 +1,12 @@
+<%= link_to "all stories", stories_path %>
+
+<h1><%= @story.title %></h1>
+<p><%= @story.summary %></p>
+<h2>Chapters:</h2>
+<ul>
+  <% @story.chapters.each do |chapter| %>
+    <li>
+      <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story, chapter.number)) %>
+    </li>
+  <% end %>
+</ul>
