@@ -1,7 +1,7 @@
 class Story < ApplicationRecord
   has_many :chapters
 
-  before_validation :generate_unique_code
+  before_validation :generate_unique_code, on: :create
 
   validates :title, presence: true
   validates :summary, presence: true
