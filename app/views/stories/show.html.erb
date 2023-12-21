@@ -6,7 +6,7 @@
 <ul>
   <% @story.chapters.each do |chapter| %>
     <li>
-      <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story, chapter.number)) %>
+      <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story.code, chapter.number)) %>
     </li>
   <% end %>
 </ul>

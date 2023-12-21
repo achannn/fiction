@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   root "stories#index"
-  resources :stories do
+  resources :stories, param: :code do
     resources :chapters, param: :number, path: '', except: :index
   end
 

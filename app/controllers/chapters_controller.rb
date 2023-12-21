@@ -1,5 +1,6 @@
 class ChaptersController < ApplicationController
   def show
-    @chapter = Chapter.find_by(story_id: params[:story_id], number: params[:number])
+    @story = Story.find_by(code: params[:story_code])
+    @chapter = Chapter.find_by(story_id: @story.id, number: params[:number])
   end
 end

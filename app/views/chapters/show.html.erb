@@ -1,6 +1,6 @@
 <%= link_to "all stories", stories_path %>
 <br>
-<%= link_to "all chapters", story_path(@chapter.story) %>
+<%= link_to "all chapters", story_path(@chapter.story.code) %>
 
 <h1><%= @chapter.story.title %></h1>
 <h2><%= @chapter.number %>: <%= @chapter.title %></h2>
@@ -8,13 +8,13 @@
 
 <p>
   <% if @chapter.prev %>
-    <%= link_to "prev", story_chapter_path(@chapter.prev.story, @chapter.prev.number) %>
+    <%= link_to "prev", story_chapter_path(@chapter.prev.story.code, @chapter.prev.number) %>
   <% else %>
     prev
   <% end %>
   |
   <% if @chapter.next %>
-    <%= link_to "next", story_chapter_path(@chapter.next.story, @chapter.next.number) %>
+    <%= link_to "next", story_chapter_path(@chapter.next.story.code, @chapter.next.number) %>
   <% else %>
     next
   <% end %>
