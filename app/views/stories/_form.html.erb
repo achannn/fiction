@@ -1,0 +1,23 @@
+<%= form_with model: story do |form| %>
+  <div>
+    <%= form.label :title %>
+    <br>
+    <%= form.text_field :title %>
+    <% story.errors.full_messages_for(:title).each do |message| %>
+      <p><%= message %></p>
+    <% end %>
+  </div>
+  <br>
+  <div>
+    <%= form.label :summary %>
+    <br>
+    <%= form.text_area :summary %>
+    <% story.errors.full_messages_for(:summary).each do |message| %>
+      <p><%= message %></p>
+    <% end %>
+  </div>
+  <br>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

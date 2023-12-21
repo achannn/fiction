@@ -1,4 +1,4 @@
-<%= link_to "all stories", stories_path %>
+<%= link_to "all stories", root_path %>
 
 <h1><%= @story.title %></h1>
 <p><%= @story.summary %></p>
@@ -9,4 +9,14 @@
       <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story.code, chapter.number)) %>
     </li>
   <% end %>
+  <li><%= link_to("create new chapter", new_story_chapter_path(@story.code)) %></li>
 </ul>
+
+<div>
+  <br>
+  <%= link_to("edit", edit_story_path(@story.code)) %> |
+    <%= link_to("delete", story_path(@story.code), data: {
+      turbo_method: :delete,
+      turbo_confirm: "Are you sure?"
+    }) %>
+</div>
