@@ -1,10 +1,8 @@
-<h2>Stories</h2>
-<ul>
+<ul class="list-group list-group-flush">
   <% @stories.each do |story| %>
-    <li>
+    <li class="list-group-item">
       <%= link_to story.title, story_path(story.code)%>
     </li>
   <% end %>
+  <li class="list-group-item"><strong><%= link_to("new story", new_story_path) %></strong></li>
 </ul>
-
-<%= link_to("new story", new_story_path) %>

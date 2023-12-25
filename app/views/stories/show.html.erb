@@ -1,5 +1,3 @@
-<%= link_to "all stories", root_path %>
-
 <h2><%= @story.title %></h2>
 <p><%= @story.summary %></p>
 <h2>Chapters:</h2>
@@ -9,7 +7,9 @@
       <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story.code, chapter.number)) %>
     </li>
   <% end %>
-  <li><%= link_to("create new chapter", new_story_chapter_path(@story.code)) %></li>
+  <% if @user_signed_in %>
+    <li><%= link_to("create new chapter", new_story_chapter_path(@story.code)) %></li>
+  <% end %>
 </ul>
 
 <% if @user_signed_in %>

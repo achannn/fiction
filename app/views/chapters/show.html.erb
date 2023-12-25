@@ -1,8 +1,4 @@
-<%= link_to "all stories", root_path %>
-<br>
-<%= link_to "all chapters", story_path(@chapter.story.code) %>
-
-<h2><%= @chapter.story.title %></h2>
+<h2><%= link_to(@chapter.story.title, story_path(@chapter.story.code)) %></h2>
 <h3><%= @chapter.number %>: <%= @chapter.title %></h3>
 <p><%= @chapter.body %></p>
 
