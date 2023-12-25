@@ -1,4 +1,6 @@
 class ChaptersController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:show]
+
   def show
     @chapter = Chapter.joins(:story)
                       .where(stories: {code: params[:story_code]})

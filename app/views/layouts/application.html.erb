@@ -13,6 +13,17 @@
   <body>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
+    <div>
+      <h1>Fiction.party</h1>
+      <% if @user_signed_in %>
+        signed in as <strong><%= @user.email %></strong> |
+        <%= link_to("edit profile", edit_user_registration_path ) %> |
+        <%= link_to("sign out", destroy_user_session_path, data: {turbo_method: :delete}) %>
+      <% else %>
+        <%= link_to("login", new_user_session_path) %> |
+        <%= link_to("sign up", new_user_registration_path) %>
+      <% end %>
+    </div>
     <%= yield %>
   </body>
 </html>

@@ -2,19 +2,21 @@
 <br>
 <%= link_to "all chapters", story_path(@chapter.story.code) %>
 
-<h1><%= @chapter.story.title %></h1>
-<h2><%= @chapter.number %>: <%= @chapter.title %></h2>
+<h2><%= @chapter.story.title %></h2>
+<h3><%= @chapter.number %>: <%= @chapter.title %></h3>
 <p><%= @chapter.body %></p>
 
-<div>
-  <%= link_to("edit", edit_story_chapter_path(@chapter.story.code, @chapter.number)) %>
-  <% if @is_last_chapter %>
-    | <%= link_to("delete", story_chapter_path(@chapter.story.code, @chapter.number), data: {
-        turbo_method: :delete,
-        turbo_confirm: "Are you sure?"
-    }) %>
-  <%end %>
-</div>
+<% if @user_signed_in %>
+  <div>
+    <%= link_to("edit", edit_story_chapter_path(@chapter.story.code, @chapter.number)) %>
+    <% if @is_last_chapter %>
+      | <%= link_to("delete", story_chapter_path(@chapter.story.code, @chapter.number), data: {
+          turbo_method: :delete,
+          turbo_confirm: "Are you sure?"
+      }) %>
+    <%end %>
+  </div>
+<% end %>
 <br>
 <div>
   <% if @chapter.prev %>
