@@ -12,64 +12,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
-
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .bd-mode-toggle .dropdown-menu .active .bi {
-            display: block !important;
+        .mt-6 {
+            margin-top: 4rem;
         }
     </style>
   </head>
 
   <body>
     <div class="container">
-      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
-          </svg>
-          <span class="fs-4">fiction.party</span>
-        </a>
-
-        <ul class="nav nav-pills">
-          <% if @user_signed_in %>
-            <li class="nav-item"><%= link_to "edit profile", edit_user_registration_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to "sign out", destroy_user_session_path, class: "nav-link", data: {turbo_method: :delete} %></li>
-          <% else %>
-            <li class="nav-item"><%= link_to("login", new_user_session_path, class: "nav-link") %></li>
-            <li class="nav-item"><%= link_to("sign up", new_user_registration_path, class: "nav-link") %></li>
-          <% end %>
-
-        </ul>
+      <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <div class="container-fluid">
+            <%= link_to("fiction.party", root_path, class: "navbar-brand") %>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+              <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item"><%= link_to("read", root_path, class: "nav-link") %></li>
+                <li class="nav-item"><%= link_to("write", "#", class: "nav-link") %></li>
+              </ul>
+              <ul class="navbar-nav">
+                <% if @user_signed_in %>
+                  <li class="nav-item"><%= link_to "edit account", edit_user_registration_path, class: "nav-link" %></li>
+                  <li class="nav-item"><%= link_to "sign out", destroy_user_session_path, class: "nav-link", data: {turbo_method: :delete} %></li>
+                <% else %>
+                  <li class="nav-item"><%= link_to("login", new_user_session_path, class: "nav-link") %></li>
+                  <li class="nav-item"><%= link_to("sign up", new_user_registration_path, class: "nav-link") %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </nav>
       </header>
     </div>
-
-    <% if notice %>
-      <div class="alert alert-info" role="alert">
-        <%= notice %>
+    <main class="flex-shrink-0 mt-6">
+      <% if notice %>
+        <div class="alert alert-info" role="alert">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="alert alert-warning" role="alert">
+          <%= alert %>
+        </div>
+      <% end %>
+      <div class="container">
+        <%= yield %>
       </div>
-    <% end %>
-    <% if alert %>
-    <div class="alert alert-warning" role="alert">
-      <%= alert %>
-    </div>
-    <% end %>
-
-    <div class="container">
-      <%= yield %>
-    </div>
+    </main>
   </body>
 </html>

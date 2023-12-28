@@ -2,7 +2,7 @@ class StoriesController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
-    @stories = Story.all
+    @stories = Story.all.order(updated_at: :desc)
   end
 
   def show

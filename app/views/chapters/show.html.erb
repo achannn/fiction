@@ -5,7 +5,7 @@
 <% if @user_signed_in %>
   <div>
     <%= link_to("edit", edit_story_chapter_path(@chapter.story.code, @chapter.number)) %>
-    <% if @is_last_chapter %>
+    <% if @next.nil? %>
       | <%= link_to("delete", story_chapter_path(@chapter.story.code, @chapter.number), data: {
           turbo_method: :delete,
           turbo_confirm: "Are you sure?"
@@ -15,14 +15,14 @@
 <% end %>
 <br>
 <div>
-  <% if @chapter.prev %>
-    <%= link_to "prev", story_chapter_path(@chapter.prev.story.code, @chapter.prev.number) %>
+  <% if @prev %>
+    <%= link_to "prev", story_chapter_path(@prev.story.code, @prev.number) %>
   <% else %>
     prev
   <% end %>
   |
-  <% if @chapter.next %>
-    <%= link_to "next", story_chapter_path(@chapter.next.story.code, @chapter.next.number) %>
+  <% if @next %>
+    <%= link_to "next", story_chapter_path(@next.story.code, @next.number) %>
   <% else %>
     next
   <% end %>

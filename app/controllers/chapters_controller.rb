@@ -6,7 +6,8 @@ class ChaptersController < ApplicationController
                       .where(stories: {code: params[:story_code]})
                       .where(chapters: {number: params[:number]})
                       .first
-    @is_last_chapter = @chapter.story.last_chapter.number == @chapter.number
+    @prev = @chapter.prev
+    @next = @chapter.next
   end
 
   def new
