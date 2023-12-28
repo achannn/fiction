@@ -1,14 +1,14 @@
 <h2><%= @story.title %></h2>
 <p><%= @story.summary %></p>
 <h2>Chapters:</h2>
-<ul>
+<ul class="list-group list-group-flush">
   <% @story.chapters.each do |chapter| %>
-    <li>
+    <li class="list-group-item">
       <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story.code, chapter.number)) %>
     </li>
   <% end %>
   <% if @user_signed_in %>
-    <li><%= link_to("create new chapter", new_story_chapter_path(@story.code)) %></li>
+    <li class="list-group-item"><b><%= link_to("create new chapter", new_story_chapter_path(@story.code)) %></b></li>
   <% end %>
 </ul>
 
