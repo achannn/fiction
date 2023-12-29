@@ -1,5 +1,7 @@
 class ChaptersController < ApplicationController
   skip_before_action :authenticate_user!, only: [:show]
+  before_action :check_author_using_code, only: [:new, :edit, :destroy]
+  before_action :check_author_using_id, only: [:create, :update]
 
   def show
     @chapter = Chapter.joins(:story)
@@ -11,17 +13,16 @@ class ChaptersController < ApplicationController
   end
 
   def new
-    @story = Story.find_by(code: params[:story_code])
-    number = @story.last_chapter.nil? ? 1 : @story.last_chapter.number+1
-    @chapter = @story.chapters.new(number: number)
+    @story = @user.stories.find_by(code: params[:story_code])
+    @chapter = @story.chapters.new(number: @story.next_chapter_number)
   end
 
   def create
-    @story = Story.find(params[:story_code])
-    @chapter = @story.chapters.new(chapter_params)
-    @chapter.number = @story.last_chapter.nil? ? 1 : @story.last_chapter.number+1
-    if @chapter.save
-      redirect_to story_chapter_path(@story.code, @chapter.number)
+    story = @user.stories.find(params[:story_code])
+    chapter = story.chapters.new(chapter_params)
+    chapter.number = story.next_chapter_number
+    if chapter.save
+      redirect_to story_chapter_path(story.code, chapter.number)
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,26 +36,36 @@ class ChaptersController < ApplicationController
   end
 
   def update
-    @chapter = Chapter.find(params[:number])
-    if @chapter.update(chapter_params)
-      redirect_to story_chapter_path(@chapter.story.code, @chapter.number)
+    chapter = Chapter.find(params[:number])
+    if chapter.update(chapter_params)
+      redirect_to story_chapter_path(chapter.story.code, chapter.number)
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @chapter = Chapter.joins(:story)
+    chapter = Chapter.joins(:story)
                       .where(stories: {code: params[:story_code]})
                       .where(chapters: {number: params[:number]})
                       .first
 
-    if @chapter.story.last_chapter.number == @chapter.number
-      @chapter.destroy
-      redirect_to story_path(@chapter.story.code)
+    if chapter.story.last_chapter.number == chapter.number
+      chapter.destroy
+      redirect_to story_path(chapter.story.code)
     else
       render :show, status:400
     end
+  end
+
+  def check_author_using_code
+    author = User.joins("JOIN stories ON stories.author_id = users.id AND stories.code = '#{params[:story_code]}'").first
+    redirect_to(root_path, status: :forbidden) unless author == current_user
+  end
+
+  def check_author_using_id
+    author = User.joins("JOIN stories ON stories.author_id = users.id AND stories.id = '#{params[:story_code]}'").first
+    redirect_to(root_path, status: :forbidden) unless author == current_user
   end
 
   private

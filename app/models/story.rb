@@ -1,5 +1,6 @@
 class Story < ApplicationRecord
   has_many :chapters, dependent: :destroy
+  belongs_to :author, class_name: 'User'
 
   before_validation :generate_unique_code, on: :create
 
@@ -16,5 +17,10 @@ class Story < ApplicationRecord
 
   def last_chapter
     self.chapters.order(number: :desc).first
+  end
+
+  def next_chapter_number
+    last_chapter = self.last_chapter
+    last_chapter.nil? ? 1 : last_chapter.number+1
   end
 end
