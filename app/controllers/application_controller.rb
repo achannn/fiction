@@ -1,7 +1,10 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!, :set_current_user,
-                :set_user_signed_in
+  before_action :authenticate_user!, :set_current_user, :set_user_signed_in
   before_action :configure_permitted_parameters, if: :devise_controller?
+
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  private
 
   def set_current_user
     @user = current_user
@@ -9,6 +12,10 @@ class ApplicationController < ActionController::Base
 
   def set_user_signed_in
     @user_signed_in = user_signed_in?
+  end
+
+  def record_not_found
+    redirect_to root_path, status: :not_found
   end
 
   protected
