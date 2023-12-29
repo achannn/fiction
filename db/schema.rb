@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_28_230339) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_29_235020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "chapters", force: :cascade do |t|
     t.bigint "story_id", null: false
-    t.integer "number"
+    t.integer "number", null: false
     t.string "title"
     t.text "body"
     t.datetime "created_at", null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_230339) do
     t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "code"
+    t.string "code", null: false
     t.bigint "author_id", null: false
     t.index ["author_id"], name: "index_stories_on_author_id"
     t.index ["code"], name: "index_stories_on_code", unique: true
@@ -49,7 +49,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_230339) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
+    t.string "username", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
