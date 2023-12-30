@@ -3,11 +3,11 @@
 one:
   story: one
   number: 1
-  title: MyString
-  body: MyText
+  title: Chapter one
+  body: Body one
 
 two:
   story: two
   number: 1
-  title: MyString
-  body: MyText
+  title: Chapter two
+  body: Body two

@@ -55,17 +55,17 @@ class ChaptersController < ApplicationController
 
   def destroy
     ActiveRecord::Base.transaction do
-      chapter = Chapter.joins(:story)
+      @chapter = Chapter.joins(:story)
                        .joins("JOIN users ON users.id = stories.author_id")
                        .where(stories: {code: params[:story_code]})
                        .where(chapters: {number: params[:number]})
                        .where(users: {id: @user.id})
                        .first!
-      if chapter.story.last_chapter.number == chapter.number
-        chapter.destroy
-        redirect_to story_path(chapter.story.code)
+      if @chapter.story.last_chapter.number == @chapter.number
+        @chapter.destroy
+        redirect_to story_path(@chapter.story.code)
       else
-        render :show, status:400
+        render :show, status: :internal_server_error
       end
     end
   end
