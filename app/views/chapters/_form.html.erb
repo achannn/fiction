@@ -1,7 +1,5 @@
 <%= form_with model: chapter, url: [story, chapter] do |form| %>
   <div>
-    <strong>Chapter <%= chapter.number %></strong>
-    <br>
     <%= form.label :title %>
     <br>
     <%= form.text_field :title %>

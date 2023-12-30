@@ -8,19 +8,16 @@ class Story < ApplicationRecord
   validates :summary, presence: true
   validates :code, presence: true, uniqueness: true
 
+  def last_chapter
+    self.chapters.order(number: :desc).first
+  end
+
+  private
+
   def generate_unique_code
     loop do
       self.code = SecureRandom.hex(3)
       break unless Story.exists?(code: self.code)
     end
-  end
-
-  def last_chapter
-    self.chapters.order(number: :desc).first
-  end
-
-  def next_chapter_number
-    last_chapter = self.last_chapter
-    last_chapter.nil? ? 1 : last_chapter.number+1
   end
 end

@@ -12,17 +12,22 @@ class ChaptersController < ApplicationController
 
   def new
     @story = @user.stories.find_by!(code: params[:story_code])
-    @chapter = @story.chapters.new(number: @story.next_chapter_number)
+    @chapter = @story.chapters.new
   end
 
   def create
-    story = @user.stories.find(params[:story_code])
-    chapter = story.chapters.new(chapter_params)
-    chapter.number = story.next_chapter_number
-    if chapter.save
-      redirect_to story_chapter_path(story.code, chapter.number)
-    else
-      render :new, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      story = @user.stories.find(params[:story_code])
+      last_chapter = story.last_chapter
+      new_chapter_number = last_chapter.nil? ? 1 : last_chapter.number+1
+
+      chapter = story.chapters.new(chapter_params)
+      chapter.number = new_chapter_number
+      if chapter.save
+        redirect_to story_chapter_path(story.code, chapter.number)
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 
@@ -49,17 +54,19 @@ class ChaptersController < ApplicationController
   end
 
   def destroy
-    chapter = Chapter.joins(:story)
-                     .joins("JOIN users ON users.id = stories.author_id")
-                     .where(stories: {code: params[:story_code]})
-                     .where(chapters: {number: params[:number]})
-                     .where(users: {id: @user.id})
-                     .first!
-    if chapter.story.last_chapter.number == chapter.number
-      chapter.destroy
-      redirect_to story_path(chapter.story.code)
-    else
-      render :show, status:400
+    ActiveRecord::Base.transaction do
+      chapter = Chapter.joins(:story)
+                       .joins("JOIN users ON users.id = stories.author_id")
+                       .where(stories: {code: params[:story_code]})
+                       .where(chapters: {number: params[:number]})
+                       .where(users: {id: @user.id})
+                       .first!
+      if chapter.story.last_chapter.number == chapter.number
+        chapter.destroy
+        redirect_to story_path(chapter.story.code)
+      else
+        render :show, status:400
+      end
     end
   end
 
