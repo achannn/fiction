@@ -18,11 +18,7 @@ class ChaptersController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       story = @user.stories.find(params[:story_code])
-      last_chapter = story.last_chapter
-      new_chapter_number = last_chapter.nil? ? 1 : last_chapter.number+1
-
       chapter = story.chapters.new(chapter_params)
-      chapter.number = new_chapter_number
       if chapter.save
         redirect_to story_chapter_path(story.code, chapter.number)
       else
@@ -61,11 +57,12 @@ class ChaptersController < ApplicationController
                        .where(chapters: {number: params[:number]})
                        .where(users: {id: @user.id})
                        .first!
-      if @chapter.story.last_chapter.number == @chapter.number
+
+      begin
         @chapter.destroy
         redirect_to story_path(@chapter.story.code)
-      else
-        render :show, status: :internal_server_error
+      rescue InvalidDestroyCall
+        render :show, status: :bad_request
       end
     end
   end

@@ -25,4 +25,12 @@ class StoryTest < ActiveSupport::TestCase
     new_story = Story.create(author: users(:one), title:"1", summary:"one")
     assert_equal false, new_story.code.nil?
   end
+
+  test "deleting a story also deletes its chapters" do
+    chapter_id = chapters(:one).id
+    stories(:one).destroy
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Chapter.find(chapter_id)
+    end
+  end
 end

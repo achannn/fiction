@@ -135,21 +135,4 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     delete story_path("TESTS1")
     assert_response :redirect
   end
-
-  # other
-
-  test "deleting a story also deletes its chapters" do
-    sign_in users(:one)
-
-    story_id = stories(:one).id
-    chapter_id = chapters(:one).id
-    delete story_path("TESTS1")
-
-    assert_raises(ActiveRecord::RecordNotFound) do
-      Story.find(story_id)
-    end
-    assert_raises(ActiveRecord::RecordNotFound) do
-      Chapter.find(chapter_id)
-    end
-  end
 end
