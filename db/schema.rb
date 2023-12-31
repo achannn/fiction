@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_29_235020) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_31_174050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,26 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_29_235020) do
     t.datetime "updated_at", null: false
     t.index ["story_id", "number"], name: "index_chapters_on_story_id_and_number", unique: true
     t.index ["story_id"], name: "index_chapters_on_story_id"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.bigint "user_id", null: false
+    t.text "message", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_chat_messages_on_chat_id"
+    t.index ["user_id"], name: "index_chat_messages_on_user_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.bigint "chapter_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chapter_id", "user_id"], name: "index_chats_on_chapter_id_and_user_id", unique: true
+    t.index ["chapter_id"], name: "index_chats_on_chapter_id"
+    t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
   create_table "stories", force: :cascade do |t|
@@ -56,5 +76,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_29_235020) do
   end
 
   add_foreign_key "chapters", "stories"
+  add_foreign_key "chat_messages", "chats"
+  add_foreign_key "chat_messages", "users"
+  add_foreign_key "chats", "chapters"
+  add_foreign_key "chats", "users"
   add_foreign_key "stories", "users", column: "author_id"
 end
