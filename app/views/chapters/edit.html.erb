@@ -1,1 +1,1 @@
-<%= render "form", story: @chapter.story, chapter: @chapter %>
+<%= render "form", chapter: @chapter, url: story_chapter_path(@chapter.story.code, @chapter.number) %>

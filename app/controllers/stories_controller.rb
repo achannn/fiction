@@ -27,7 +27,7 @@ class StoriesController < ApplicationController
   end
 
   def update
-    story = @user.stories.find(params[:code])
+    story = @user.stories.find_by!(code: params[:code])
     if story.update(story_params)
       redirect_to story_path(story.code)
     else

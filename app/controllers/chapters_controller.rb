@@ -11,13 +11,12 @@ class ChaptersController < ApplicationController
   end
 
   def new
-    @story = @user.stories.find_by!(code: params[:story_code])
-    @chapter = @story.chapters.new
+    @chapter = @user.stories.find_by!(code: params[:story_code]).chapters.new
   end
 
   def create
     ActiveRecord::Base.transaction do
-      story = @user.stories.find(params[:story_code])
+      story = @user.stories.find_by!(code: params[:story_code])
       chapter = story.chapters.new(chapter_params)
       if chapter.save
         redirect_to story_chapter_path(story.code, chapter.number)
@@ -28,20 +27,11 @@ class ChaptersController < ApplicationController
   end
 
   def edit
-    @chapter = Chapter.joins(:story)
-                      .joins("JOIN users ON users.id = stories.author_id")
-                      .where(stories: {code: params[:story_code]})
-                      .where(chapters: {number: params[:number]})
-                      .where(users: {id: @user.id})
-                      .first!
+    @chapter = get_chapter
   end
 
   def update
-    chapter = Chapter.joins(:story)
-                     .joins("JOIN users ON users.id = stories.author_id")
-                     .where(chapters: {id: params[:number]})
-                     .where(users: {id: @user.id})
-                     .first!
+    chapter = get_chapter
     if chapter.update(chapter_params)
       redirect_to story_chapter_path(chapter.story.code, chapter.number)
     else
@@ -51,13 +41,7 @@ class ChaptersController < ApplicationController
 
   def destroy
     ActiveRecord::Base.transaction do
-      @chapter = Chapter.joins(:story)
-                       .joins("JOIN users ON users.id = stories.author_id")
-                       .where(stories: {code: params[:story_code]})
-                       .where(chapters: {number: params[:number]})
-                       .where(users: {id: @user.id})
-                       .first!
-
+      @chapter = get_chapter
       begin
         @chapter.destroy
         redirect_to story_path(@chapter.story.code)
@@ -68,6 +52,15 @@ class ChaptersController < ApplicationController
   end
 
   private
+
+  def get_chapter
+    Chapter.joins(:story)
+           .joins("JOIN users ON users.id = stories.author_id")
+           .where(stories: {code: params[:story_code]})
+           .where(chapters: {number: params[:number]})
+           .where(users: {id: @user.id})
+           .first!
+  end
 
   def chapter_params
     params.require(:chapter).permit(:title, :body)

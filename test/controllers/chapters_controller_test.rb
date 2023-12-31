@@ -17,13 +17,13 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
     get new_story_chapter_path("TESTS1")
     assert_response :success
     assert_match "Create Chapter", @response.body
-    assert_match "/s/#{stories(:one).id}/c", @response.body
+    assert_match "/s/TESTS1/c", @response.body
   end
 
   test "create should create new chapter for story" do
     sign_in users(:one)
 
-    post story_chapters_path(stories(:one).id), params: { chapter: {title: "2", body: "two"}}
+    post story_chapters_path("TESTS1"), params: { chapter: {title: "2", body: "two"}}
     new_chapter = Chapter.find_by!(title: "2")
     assert_equal new_chapter.story, stories(:one)
     assert_redirected_to story_chapter_path("TESTS1", 2)
@@ -42,7 +42,7 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
   test "update should update existing chapter" do
     sign_in users(:one)
 
-    patch story_chapter_path(stories(:one).id, chapters(:one).id),
+    patch story_chapter_path("TESTS1", 1),
           params: { chapter: {title: "New title", body: "New body"}}
     assert_redirected_to story_chapter_path("TESTS1", 1)
     chapter = Chapter.find(chapters(:one).id)
@@ -75,11 +75,11 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
   test "new create edit update destroy require auth" do
     get new_story_chapter_path("TESTS1")
     assert_redirected_to new_user_session_path
-    post story_chapters_path(stories(:one).id), params: { chapter: {title: "2", body: "two"}}
+    post story_chapters_path("TESTS1"), params: { chapter: {title: "2", body: "two"}}
     assert_redirected_to new_user_session_path
     get edit_story_chapter_path("TESTS1", 1)
     assert_redirected_to new_user_session_path
-    patch story_chapter_path(stories(:one).id, chapters(:one).id),
+    patch story_chapter_path("TESTS1", 1),
           params: { chapter: {title: "New title", body: "New body"}}
     assert_redirected_to new_user_session_path
     delete story_chapter_path("TESTS1", 1)
@@ -88,11 +88,11 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:one)
     get new_story_chapter_path("TESTS1")
     assert_response :success
-    post story_chapters_path(stories(:one).id), params: { chapter: {title: "2", body: "two"}}
+    post story_chapters_path("TESTS1"), params: { chapter: {title: "2", body: "two"}}
     assert_response :redirect
     get edit_story_chapter_path("TESTS1", 1)
     assert_response :success
-    patch story_chapter_path(stories(:one).id, chapters(:one).id),
+    patch story_chapter_path("TESTS1", 1),
           params: { chapter: {title: "New title", body: "New body"}}
     assert_response :redirect
     delete story_chapter_path("TESTS1", 2)
@@ -106,11 +106,11 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
     sign_in other_user
     get new_story_chapter_path("TESTS1")
     assert_response :not_found
-    post story_chapters_path(stories(:one).id), params: { chapter: {title: "2", body: "two"}}
+    post story_chapters_path("TESTS1"), params: { chapter: {title: "2", body: "two"}}
     assert_response :not_found
     get edit_story_chapter_path("TESTS1", 1)
     assert_response :not_found
-    patch story_chapter_path(stories(:one).id, chapters(:one).id),
+    patch story_chapter_path("TESTS1", 1),
           params: { chapter: {title: "New title", body: "New body"}}
     assert_response :not_found
     delete story_chapter_path("TESTS1", 2)
@@ -120,11 +120,11 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
     sign_in author
     get new_story_chapter_path("TESTS1")
     assert_response :success
-    post story_chapters_path(stories(:one).id), params: { chapter: {title: "2", body: "two"}}
+    post story_chapters_path("TESTS1"), params: { chapter: {title: "2", body: "two"}}
     assert_response :redirect
     get edit_story_chapter_path("TESTS1", 1)
     assert_response :success
-    patch story_chapter_path(stories(:one).id, chapters(:one).id),
+    patch story_chapter_path("TESTS1", 1),
           params: { chapter: {title: "New title", body: "New body"}}
     assert_response :redirect
     delete story_chapter_path("TESTS1", 2)

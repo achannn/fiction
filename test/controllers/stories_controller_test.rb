@@ -47,7 +47,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   test "update should update existing story" do
     sign_in users(:one)
 
-    patch story_path(stories(:one).id), params: { story: {title: "New title", summary: "New summary"}}
+    patch story_path("TESTS1"), params: { story: {title: "New title", summary: "New summary"}}
     assert_redirected_to story_path("TESTS1")
     story = Story.find(stories(:one).id)
     assert_equal "New title", story.title
@@ -87,7 +87,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
     get edit_story_path("TESTS1")
     assert_redirected_to new_user_session_path
-    patch story_path(stories(:one).id), params: { story: {title: "1", summary: "1"}}
+    patch story_path("TESTS1"), params: { story: {title: "1", summary: "1"}}
     assert_redirected_to new_user_session_path
     delete story_path("TESTS1")
     assert_redirected_to new_user_session_path
@@ -99,7 +99,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     get edit_story_path("TESTS1")
     assert_response :success
-    patch story_path(stories(:one).id), params: { story: {title: "1", summary: "1"}}
+    patch story_path("TESTS1"), params: { story: {title: "1", summary: "1"}}
     assert_response :redirect
     delete story_path("TESTS1")
     assert_response :redirect
@@ -121,7 +121,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     sign_in other_user
     get edit_story_path("TESTS1")
     assert_response :not_found
-    patch story_path(stories(:one).id), params: { story: {title: "1", summary: "1"}}
+    patch story_path("TESTS1"), params: { story: {title: "1", summary: "1"}}
     assert_response :not_found
     delete story_path("TESTS1")
     assert_response :not_found
@@ -130,7 +130,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     sign_in author
     get edit_story_path("TESTS1")
     assert_response :success
-    patch story_path(stories(:one).id), params: { story: {title: "1", summary: "1"}}
+    patch story_path("TESTS1"), params: { story: {title: "1", summary: "1"}}
     assert_response :redirect
     delete story_path("TESTS1")
     assert_response :redirect
