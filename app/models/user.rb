@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   has_many :stories, foreign_key: :author_id
+  has_many :chats
+  has_many :chat_messages
 
   validates :username, presence: true, uniqueness: true, format: {with: /\A[A-Za-z0-9]+\z/, message: 'must be alphanumeric'}
 
