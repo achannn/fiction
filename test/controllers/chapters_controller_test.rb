@@ -11,6 +11,24 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
     assert_match "Body one", @response.body
   end
 
+  test "show renders chat with chat history if user is signed in" do
+    sign_in users(:one)
+
+    get story_chapter_path("TESTS1", 1)
+    assert_response :success
+    assert_match "Ask questions and find out more about the world!", @response.body
+    assert_match 'data-react-component="ChatWindow"', @response.body
+    assert_match "Message one", @response.body
+  end
+
+  test "show doesnt render chat if user not signed in" do
+    get story_chapter_path("TESTS1", 1)
+    assert_response :success
+    assert_match "Login to chat with the story!", @response.body
+    assert_no_match 'data-react-component="ChatWindow"', @response.body
+    assert_no_match "Message one", @response.body
+  end
+
   test "new should return new chapter form for story" do
     sign_in users(:one)
 

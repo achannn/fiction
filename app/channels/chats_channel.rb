@@ -1,5 +1,5 @@
 class ChatsChannel < ApplicationCable::Channel
-  after_subscribe :broadcast_history, unless: :subscription_rejected?
+  Message = Struct.new(:chat_message, :user)
 
   def subscribed
     @chat = Chat.create_or_find_by!(chapter_id: params["chapter_id"], user_id: current_user.id)
@@ -12,19 +12,15 @@ class ChatsChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    message = @chat.chat_messages.create(user: current_user, message: data["message"])
-    ChatsChannel.broadcast_to(@chat, message)
+    chat_message = @chat.new_chat_message(current_user, data["message"])
+    ChatsChannel.broadcast_to(@chat, Message.new(
+      chat_message: chat_message, user: chat_message.user
+    ))
 
-    system_user = User.find_by(username: "system", email: "system@fiction.party")
-    response = @chat.chat_messages.create(user: system_user, message: "I received your message: #{data["message"]}")
-    ChatsChannel.broadcast_to(@chat, response)
-  end
-
-  private
-
-  def broadcast_history
-    @chat.chat_messages.order(created_at: :asc).each do |message|
-      ChatsChannel.broadcast_to(@chat, message)
-    end
+    chat_message.generate_reply{|message|
+      ChatsChannel.broadcast_to(message.chat, Message.new(
+        chat_message: message, user: message.user
+      ))
+    }
   end
 end

@@ -8,6 +8,17 @@ class ChaptersController < ApplicationController
                       .first!
     @prev = @chapter.prev
     @next = @chapter.next
+
+    @chat_history = []
+    if user_signed_in?
+      chat = Chat.create_or_find_by!(chapter: @chapter, user: @user)
+      chat.get_history.each do |message|
+        @chat_history << ChatsChannel::Message.new(
+          chat_message: message,
+          user: message.user,
+        )
+      end
+    end
   end
 
   def new

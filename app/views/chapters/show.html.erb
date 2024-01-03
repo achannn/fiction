@@ -14,6 +14,15 @@
   </div>
 <% end %>
 <br>
+<br>
+<h4>Chat</h4>
+<% if @user_signed_in %>
+  <p>Ask questions and find out more about the world!</p>
+  <div data-react-component="ChatWindow" data-props="<%= {'user': @user, 'chapter_id': @chapter.id, 'chat_history': @chat_history}.to_json %>"></div>
+<% else %>
+  <p>Login to chat with the story!</p>
+<% end %>
+<br>
 <div>
   <% if @prev %>
     <%= link_to "prev", story_chapter_path(@prev.story.code, @prev.number) %>

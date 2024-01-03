@@ -1,0 +1,18 @@
+{
+  "name": "app",
+  "private": "true",
+  "dependencies": {
+    "@hotwired/turbo-rails": "hotwired/turbo-rails",
+    "@types/actioncable": "^5.2.11",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "actioncable": "^5.2.8-1",
+    "esbuild": "^0.19.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets"
+  }
+}

@@ -3,9 +3,9 @@
 one:
   chat: one
   user: one
-  message: MyText
+  message: "Message one"
 
 two:
   chat: two
   user: two
-  message: MyText
+  message: "Message two"

@@ -1,4 +1,6 @@
 class Chapter < ApplicationRecord
+  has_many :chats, dependent: :destroy
+
   belongs_to :story
 
   before_validation :add_chapter_number, on: :create
