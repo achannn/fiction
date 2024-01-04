@@ -13,17 +13,22 @@ class ChatsChannelTest < ActionCable::Channel::TestCase
     assert_has_stream_for chats(:two)
   end
 
-  test "receive rebroadcasts the message and then replies" do
+  test "receive rebroadcasts the message and then generates reply" do
     require 'minitest/mock'
 
     stub_connection current_user: users(:one)
     subscribe chapter_id: chapters(:one).id
 
-    broadcasts = capture_broadcasts(broadcasting_for(chats(:one))) do
-      perform(:receive, message: "test incoming message")
+    mock = Minitest::Mock.new
+    mock.expect :call, "test response", [ChatMessage]
+
+    ChatResponder.stub :call, mock do
+      broadcasts = capture_broadcasts(broadcasting_for(chats(:one))) do
+        perform(:receive, message: "test incoming message")
+      end
+      assert_equal 2, broadcasts.length
+      assert_equal "test incoming message", broadcasts.first["chat_message"]["message"]
+      assert_equal "test response", broadcasts.last["chat_message"]["message"]
     end
-    assert_equal 2, broadcasts.length
-    assert_equal "test incoming message", broadcasts.first["chat_message"]["message"]
-    assert_equal "I received your message: test incoming message", broadcasts.last["chat_message"]["message"]
   end
 end

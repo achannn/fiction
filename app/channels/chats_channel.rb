@@ -3,12 +3,11 @@ class ChatsChannel < ApplicationCable::Channel
 
   def subscribed
     @chat = Chat.create_or_find_by!(chapter_id: params["chapter_id"], user_id: current_user.id)
-    stop_stream_for(@chat)
     stream_for @chat
   end
 
   def unsubscribed
-    stop_all_streams
+    stop_stream_for(@chat)
   end
 
   def receive(data)

@@ -73,3 +73,5 @@ gem "bootstrap", "~> 5.3"
 gem "sassc-rails", "~> 2.1"
 
 gem "jsbundling-rails", "~> 1.2"
+
+gem "ruby-openai", "~> 6.3"

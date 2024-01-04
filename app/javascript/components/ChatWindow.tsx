@@ -37,9 +37,12 @@ function ChatWindow({ user, chapter_id, chat_history }: ChatWindowProps) {
         const consumer = actionCable.createConsumer('ws:localhost:3000/cable')
         const subscription = consumer.subscriptions.create({channel: 'ChatsChannel', chapter_id: chapter_id},
             {
-                received: (message) => {
+                received: (message: Message) => {
                     console.log(message);
                     setMessages((prevState) => [...prevState, message]);
+                    if (message.user.id != user.id) {
+                        setDisableInput(false);
+                    }
                 },
             });
 
@@ -56,10 +59,12 @@ function ChatWindow({ user, chapter_id, chat_history }: ChatWindowProps) {
     }, [messages])
 
     const [input, setInput] = useState("");
+    const [disableInput, setDisableInput] = useState(false);
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault()
         subscription?.send({message: input})
         setInput("")
+        setDisableInput(true)
     }
 
     return (
@@ -78,7 +83,7 @@ function ChatWindow({ user, chapter_id, chat_history }: ChatWindowProps) {
                     <div className="panel-footer">
                         <form onSubmit={handleSubmit}>
                             <div className="input-group">
-                                <input type="text" className="form-control" name="input" placeholder="message"
+                                <input type="text" className="form-control" name="input" placeholder="message" disabled={disableInput}
                                        onChange={(e)=>{setInput(e.target.value)}} value={input}/>
                                 <span className="input-group-btn">
                                     <button className="btn btn-primary" type="submit" disabled={!input}>send</button>
