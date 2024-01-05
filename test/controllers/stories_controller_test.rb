@@ -31,7 +31,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
     post stories_path, params: { story: {title: "Title three", summary: "Summary three"}}
     new_story = Story.find_by!(title: "Title three")
-    assert_redirected_to story_path(new_story.code)
+    assert_redirected_to edit_story_path(new_story.code)
   end
 
   test "edit should return populated edit story form" do
@@ -48,7 +48,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:one)
 
     patch story_path("TESTS1"), params: { story: {title: "New title", summary: "New summary"}}
-    assert_redirected_to story_path("TESTS1")
+    assert_redirected_to edit_story_path("TESTS1")
     story = Story.find(stories(:one).id)
     assert_equal "New title", story.title
     assert_equal "New summary", story.summary
@@ -59,7 +59,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
     story_id = stories(:one).id
     delete story_path("TESTS1")
-    assert_redirected_to stories_path
+    assert_redirected_to write_path
     assert_raises(ActiveRecord::RecordNotFound) do
       Story.find(story_id)
     end

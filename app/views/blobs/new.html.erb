@@ -1,0 +1,3 @@
+<h2><%= @blob.story.title %></h2>
+<h4>New blob</h4>
+<%= render "form", blob: @blob, url: story_blobs_path(@blob.story.code) %>

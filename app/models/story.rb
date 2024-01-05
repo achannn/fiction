@@ -1,5 +1,6 @@
 class Story < ApplicationRecord
   has_many :chapters, dependent: :destroy
+  has_many :blobs, dependent: :destroy
   belongs_to :author, class_name: 'User'
 
   before_validation :generate_unique_code, on: :create

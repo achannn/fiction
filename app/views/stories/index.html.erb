@@ -1,8 +1,8 @@
+<h3>Discover</h3>
 <ul class="list-group list-group-flush">
   <% @stories.each do |story| %>
     <li class="list-group-item">
-      <%= link_to story.title, story_path(story.code)%> <small class="text-muted">- <%= story.author.username %></small>
+      <%= link_to story.title, story_path(story.code)%> <small class="text-muted">by <%= story.author.username %></small>
     </li>
   <% end %>
-  <li class="list-group-item"><strong><%= link_to("write new story", new_story_path) %></strong></li>
 </ul>

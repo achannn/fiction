@@ -31,7 +31,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item"><%= link_to("read", root_path, class: "nav-link") %></li>
-                <li class="nav-item"><%= link_to("write", "#", class: "nav-link") %></li>
+                <li class="nav-item"><%= link_to("write", '/write', class: "nav-link") %></li>
               </ul>
               <ul class="navbar-nav">
                 <% if @user_signed_in %>
@@ -59,6 +59,13 @@
         </div>
       <% end %>
       <div class="container">
+        <div>
+          <% if @back_url %>
+            <small><%= link_to("back", @back_url) %></small>
+            <br>
+            <br>
+          <% end %>
+        </div>
         <%= yield %>
       </div>
     </main>

@@ -1,1 +1,46 @@
+<h2><%= @story.title %></h2>
+<p><%= @story.summary %></p>
+<hr>
 <%= render "form", story: @story, url: story_path(@story.code) %>
+<br>
+<h4>chapters</h4>
+<ul class="list-group list-group-flush">
+  <% @story.chapters.order(number: :asc).each do |chapter| %>
+    <li class="list-group-item">
+      <%= link_to "#{chapter.number}: #{chapter.title}", edit_story_chapter_path(@story.code, chapter.number)%>
+      <% if chapter.next.nil? %>
+        <small>
+          <%= link_to("[x]", story_chapter_path(@story.code, chapter.number), data: {
+          turbo_method: :delete,
+          turbo_confirm: "Are you sure?"
+          }) %>
+        </small>
+      <% end %>
+    </li>
+  <% end %>
+  <li class="list-group-item"><strong><%= link_to("write new chapter", new_story_chapter_path(@story.code)) %></strong></li>
+</ul>
+<br>
+<h4>blobs</h4>
+<ul class="list-group list-group-flush">
+  <% @story.blobs.each do |blob| %>
+    <li class="list-group-item">
+      <%= link_to blob.title, edit_story_blob_path(@story.code, blob.id)%>
+      <small>
+        <%= link_to("[x]", story_blob_path(@story.code, blob.id), data: {
+          turbo_method: :delete,
+          turbo_confirm: "Are you sure?"
+        }) %>
+      </small>
+    </li>
+  <% end %>
+  <li class="list-group-item"><strong><%= link_to("create new blob", new_story_blob_path(@story.code)) %></strong></li>
+</ul>
+<br>
+<h4>delete?</h4>
+<div>
+  <%= link_to("delete story", story_path(@story.code), data: {
+    turbo_method: :delete,
+    turbo_confirm: "Are you sure?"
+  }) %>
+</div>

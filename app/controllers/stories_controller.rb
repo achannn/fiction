@@ -7,16 +7,18 @@ class StoriesController < ApplicationController
 
   def show
     @story = Story.find_by!(code: params[:code])
+    @back_url = root_path
   end
 
   def new
     @story = @user.stories.new
+    @back_url = write_path
   end
 
   def create
     story = @user.stories.new(story_params)
     if story.save
-      redirect_to story_path(story.code)
+      redirect_to edit_story_path(story.code)
     else
       render :new, status: :unprocessable_entity
     end
@@ -24,12 +26,13 @@ class StoriesController < ApplicationController
 
   def edit
     @story = @user.stories.find_by!(code: params[:code])
+    @back_url = write_path
   end
 
   def update
     story = @user.stories.find_by!(code: params[:code])
     if story.update(story_params)
-      redirect_to story_path(story.code)
+      redirect_to edit_story_path(story.code)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,7 +41,7 @@ class StoriesController < ApplicationController
   def destroy
     story = @user.stories.find_by!(code: params[:code])
     story.destroy
-    redirect_to stories_path, status: :see_other
+    redirect_to '/write', status: :see_other
   end
 
   private

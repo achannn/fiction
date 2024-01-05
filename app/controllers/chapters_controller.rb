@@ -8,6 +8,7 @@ class ChaptersController < ApplicationController
                       .first!
     @prev = @chapter.prev
     @next = @chapter.next
+    @back_url = story_path(@chapter.story.code)
 
     @chat_history = []
     if user_signed_in?
@@ -23,15 +24,17 @@ class ChaptersController < ApplicationController
 
   def new
     @chapter = @user.stories.find_by!(code: params[:story_code]).chapters.new
+    @back_url = edit_story_path(@chapter.story.code)
   end
 
   def create
     ActiveRecord::Base.transaction do
       story = @user.stories.find_by!(code: params[:story_code])
-      chapter = story.chapters.new(chapter_params)
-      if chapter.save
-        redirect_to story_chapter_path(story.code, chapter.number)
+      @chapter = story.chapters.new(chapter_params)
+      if @chapter.save
+        redirect_to edit_story_chapter_path(story.code, @chapter.number)
       else
+        @back_url = edit_story_path(@chapter.story.code)
         render :new, status: :unprocessable_entity
       end
     end
@@ -39,13 +42,15 @@ class ChaptersController < ApplicationController
 
   def edit
     @chapter = get_chapter
+    @back_url = edit_story_path(@chapter.story.code)
   end
 
   def update
-    chapter = get_chapter
-    if chapter.update(chapter_params)
-      redirect_to story_chapter_path(chapter.story.code, chapter.number)
+    @chapter = get_chapter
+    if @chapter.update(chapter_params)
+      redirect_to edit_story_chapter_path(@chapter.story.code, @chapter.number)
     else
+      @back_url = edit_story_path(@chapter.story.code)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -55,9 +60,10 @@ class ChaptersController < ApplicationController
       @chapter = get_chapter
       begin
         @chapter.destroy
-        redirect_to story_path(@chapter.story.code)
+        redirect_to edit_story_path(@chapter.story.code)
       rescue InvalidDestroyCall
-        render :show, status: :bad_request
+        @back_url = edit_story_path(@chapter.story.code)
+        render :edit, status: :bad_request
       end
     end
   end

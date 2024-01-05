@@ -1,26 +1,11 @@
-<small><%= link_to("all stories", stories_path) %></small>
 <h2><%= @story.title %></h2>
 <p class="small text-muted"><%= @story.author.username %></p>
 <p><%= @story.summary %></p>
-<h2>Chapters:</h2>
+<h4>chapters</h4>
 <ul class="list-group list-group-flush">
   <% @story.chapters.order(number: :asc).each do |chapter| %>
     <li class="list-group-item">
       <%= link_to("#{chapter.number}: #{chapter.title}", story_chapter_path(@story.code, chapter.number)) %>
     </li>
   <% end %>
-  <% if @user_signed_in %>
-    <li class="list-group-item"><b><%= link_to("write new chapter", new_story_chapter_path(@story.code)) %></b></li>
-  <% end %>
 </ul>
-
-<% if @user_signed_in %>
-  <div>
-    <br>
-    <%= link_to("edit", edit_story_path(@story.code)) %> |
-      <%= link_to("delete", story_path(@story.code), data: {
-        turbo_method: :delete,
-        turbo_confirm: "Are you sure?"
-      }) %>
-  </div>
-<% end %>

@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
 
   def record_not_found
     redirect_to root_path, status: :not_found
+    logger
   end
 
   protected

@@ -2,7 +2,7 @@ class ChatMessage < ApplicationRecord
   belongs_to :chat
   belongs_to :user
 
-  validates :message, presence: true
+  validates :message, presence: true, length: {maximum: 500}
 
   def generate_reply(&callback)
     reply = ChatResponder.call(self)

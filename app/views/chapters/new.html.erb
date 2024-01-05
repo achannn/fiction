@@ -1,1 +1,3 @@
+<h2><%= @chapter.story.title %></h2>
+<h4>New chapter</h4>
 <%= render "form", chapter: @chapter, url: story_chapters_path(@chapter.story.code) %>

@@ -1,0 +1,24 @@
+<%= form_with model: blob, url: url do |form| %>
+  <div>
+    <%= form.label :title %>
+    <small>(this is for your reference only)</small>
+    <br>
+    <%= form.text_field :title %>
+    <% blob.errors.full_messages_for(:title).each do |message| %>
+      <p><%= message %></p>
+    <% end %>
+  </div>
+  <br>
+  <div>
+    <%= form.label :body %>
+    <br>
+    <%= form.text_area :body %>
+    <% blob.errors.full_messages_for(:body).each do |message| %>
+      <p><%= message %></p>
+    <% end %>
+  </div>
+  <br>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

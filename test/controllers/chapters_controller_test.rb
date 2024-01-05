@@ -24,7 +24,7 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
   test "show doesnt render chat if user not signed in" do
     get story_chapter_path("TESTS1", 1)
     assert_response :success
-    assert_match "Login to chat with the story!", @response.body
+    assert_match "Login to explore the world of the story!", @response.body
     assert_no_match 'data-react-component="ChatWindow"', @response.body
     assert_no_match "Message one", @response.body
   end
@@ -44,7 +44,7 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
     post story_chapters_path("TESTS1"), params: { chapter: {title: "2", body: "two"}}
     new_chapter = Chapter.find_by!(title: "2")
     assert_equal new_chapter.story, stories(:one)
-    assert_redirected_to story_chapter_path("TESTS1", 2)
+    assert_redirected_to edit_story_chapter_path("TESTS1", 2)
   end
 
   test "edit should return populated edit chapter form for story" do
@@ -62,7 +62,7 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
 
     patch story_chapter_path("TESTS1", 1),
           params: { chapter: {title: "New title", body: "New body"}}
-    assert_redirected_to story_chapter_path("TESTS1", 1)
+    assert_redirected_to edit_story_chapter_path("TESTS1", 1)
     chapter = Chapter.find(chapters(:one).id)
     assert_equal "New title", chapter.title
     assert_equal "New body", chapter.body
@@ -73,7 +73,7 @@ class ChaptersControllerTest < ActionDispatch::IntegrationTest
 
     chapter_id = chapters(:one).id
     delete story_chapter_path("TESTS1", 1)
-    assert_redirected_to story_path("TESTS1")
+    assert_redirected_to edit_story_path("TESTS1")
     assert_raises(ActiveRecord::RecordNotFound) do
       Chapter.find(chapter_id)
     end

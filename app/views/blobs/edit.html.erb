@@ -1,0 +1,14 @@
+<h2><%= @blob.story.title %></h2>
+<h3><%= @blob.title %></h3>
+<p><%= @blob.body %></p>
+<hr>
+<%= render "form", blob: @blob, url: story_blob_path(@blob.story.code, @blob.id) %>
+<br>
+<br>
+<h4>delete?</h4>
+<div>
+  <%= link_to("delete blob", story_blob_path(@blob.story.code, @blob.id), data: {
+    turbo_method: :delete,
+    turbo_confirm: "Are you sure?"
+  }) %>
+</div>

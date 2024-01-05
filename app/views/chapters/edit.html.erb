@@ -1,1 +1,16 @@
+<h2><%= @chapter.story.title %></h2>
+<h3><%= @chapter.number %>: <%= @chapter.title %></h3>
+<p><%= @chapter.body %></p>
+<hr>
 <%= render "form", chapter: @chapter, url: story_chapter_path(@chapter.story.code, @chapter.number) %>
+<% if @chapter.next.nil? %>
+  <br>
+  <br>
+  <div>
+    <h4>delete?</h4>
+    <%= link_to("delete chapter", story_chapter_path(@chapter.story.code, @chapter.number), data: {
+      turbo_method: :delete,
+      turbo_confirm: "Are you sure?"
+    }) %>
+  </div>
+<% end %>

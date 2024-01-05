@@ -1,26 +1,14 @@
-<h2><%= link_to(@chapter.story.title, story_path(@chapter.story.code)) %></h2>
+<h2><%= @chapter.story.title %></h2>
 <h3><%= @chapter.number %>: <%= @chapter.title %></h3>
 <p><%= @chapter.body %></p>
-
-<% if @user_signed_in %>
-  <div>
-    <%= link_to("edit", edit_story_chapter_path(@chapter.story.code, @chapter.number)) %>
-    <% if @next.nil? %>
-      | <%= link_to("delete", story_chapter_path(@chapter.story.code, @chapter.number), data: {
-          turbo_method: :delete,
-          turbo_confirm: "Are you sure?"
-      }) %>
-    <%end %>
-  </div>
-<% end %>
 <br>
 <br>
 <h4>Chat</h4>
-<% if @user_signed_in %>
+<% if @user %>
   <p>Ask questions and find out more about the world!</p>
   <div data-react-component="ChatWindow" data-props="<%= {'user': @user, 'chapter_id': @chapter.id, 'chat_history': @chat_history}.to_json %>"></div>
 <% else %>
-  <p>Login to chat with the story!</p>
+  <p>Login to explore the world of the story!</p>
 <% end %>
 <br>
 <div>
