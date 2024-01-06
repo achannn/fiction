@@ -47,6 +47,7 @@ function ChatWindow({ user, chapter_id, chat_history }: ChatWindowProps) {
             });
 
         setSubscription((() => subscription));
+        setDisableInput(false);
         return () => {
             subscription.unsubscribe()
         }
@@ -59,7 +60,7 @@ function ChatWindow({ user, chapter_id, chat_history }: ChatWindowProps) {
     }, [messages])
 
     const [input, setInput] = useState("");
-    const [disableInput, setDisableInput] = useState(false);
+    const [disableInput, setDisableInput] = useState(true);
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault()
         subscription?.send({message: input})

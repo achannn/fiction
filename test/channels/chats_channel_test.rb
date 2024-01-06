@@ -1,6 +1,8 @@
 require "test_helper"
 
 class ChatsChannelTest < ActionCable::Channel::TestCase
+  include ActiveJob::TestHelper
+
   test "subscribes to chat for chapter and user" do
     stub_connection current_user: users(:one)
     subscribe chapter_id: chapters(:one).id
@@ -13,15 +15,17 @@ class ChatsChannelTest < ActionCable::Channel::TestCase
     assert_has_stream_for chats(:two)
   end
 
-  test "receive rebroadcasts the message and then generates reply" do
+  test "the received message is rebroadcasted and then the reply is broadcasted" do
     stub_connection current_user: users(:one)
     subscribe chapter_id: chapters(:one).id
 
     broadcasts = capture_broadcasts(broadcasting_for(chats(:one))) do
-      perform(:receive, message: "test incoming message")
+      perform_enqueued_jobs do
+        perform(:receive, message: "test incoming message")
+      end
     end
     assert_equal 2, broadcasts.length
     assert_equal "test incoming message", broadcasts.first["chat_message"]["message"]
-    assert_equal "test response", broadcasts.last["chat_message"]["message"]
+    assert_equal chat_responder_ret, broadcasts.last["chat_message"]["message"]
   end
 end

@@ -1,12 +1,12 @@
 class Chapter < ApplicationRecord
+  include Embedding
+
   has_many :chats, dependent: :destroy
-  has_neighbors :embedding
 
   belongs_to :story
 
   before_validation :add_chapter_number, on: :create
   before_destroy :can_destroy?
-  after_save :generate_embedding?
 
   validates :number, presence: true, uniqueness: {scope: :story_id}
   validates :title, presence: true
@@ -30,13 +30,6 @@ class Chapter < ApplicationRecord
     if number != story.last_chapter.number
       self.errors.add(:base, "can only delete the last chapter")
       raise InvalidDestroyCall.new("can only delete the last chapter")
-    end
-  end
-
-  def generate_embedding?
-    if saved_change_to_body?
-      embedding = EmbeddingCreator.call(body)
-      self.update_column(:embedding, embedding)
     end
   end
 end

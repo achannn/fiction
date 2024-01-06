@@ -1,6 +1,8 @@
 require "test_helper"
 
 class ChapterTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   test "prev returns the previous chapter" do
     chapter2 = stories(:one).chapters.create(title: "2", body: "two")
     assert_equal chapters(:one), chapter2.prev
@@ -69,5 +71,27 @@ class ChapterTest < ActiveSupport::TestCase
     end
     chapter2.destroy
     chapter1.destroy
+  end
+
+  # embedding
+
+  test "embeddings are generated when a chapter is created" do
+    perform_enqueued_jobs do
+      chapter = stories(:one).chapters.create(title: "title", body: "body")
+      assert_equal embedding_creator_ret, Chapter.find(chapter.id).embedding
+    end
+  end
+
+  test "embeddings are generated when a chapter body is updated" do
+    perform_enqueued_jobs do
+      chapter = chapters(:one)
+      chapter.title = "updated title"
+      chapter.save
+      assert_nil Chapter.find(chapter.id).embedding
+
+      chapter.body = "updated body"
+      chapter.save
+      assert_equal embedding_creator_ret, Chapter.find(chapter.id).embedding
+    end
   end
 end
