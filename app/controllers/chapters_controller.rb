@@ -9,7 +9,9 @@ class ChaptersController < ApplicationController
     @prev = @chapter.prev
     @next = @chapter.next
     @back_url = story_path(@chapter.story.code)
-    @cable_url = "ws:#{ENV.fetch("RENDER_EXTERNAL_HOSTNAME") { "localhost:3000" }}/cable"
+
+
+    @cable_url = "wss:#{ENV.fetch("RENDER_EXTERNAL_HOSTNAME") { "localhost:3000" }}/cable"
 
     @chat_history = []
     if user_signed_in?
