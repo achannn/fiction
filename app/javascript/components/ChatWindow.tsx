@@ -34,8 +34,8 @@ interface ChatWindowProps {
 function ChatWindow({ user, chapter_id, chat_history, cable_url }: ChatWindowProps) {
     const [subscription, setSubscription] = useState<ActionCable.Channel|null>(null);
     const [messages, setMessages] = useState<Array<Message>>(chat_history);
+    const consumer = actionCable.createConsumer(cable_url)
     useEffect(() => {
-        const consumer = actionCable.createConsumer(cable_url)
         const subscription = consumer.subscriptions.create({channel: 'ChatsChannel', chapter_id: chapter_id},
             {
                 received: (message: Message) => {
@@ -53,7 +53,7 @@ function ChatWindow({ user, chapter_id, chat_history, cable_url }: ChatWindowPro
             subscription.unsubscribe();
             setDisableInput(true);
         }
-    }, [chapter_id]);
+    }, []);
 
     const ref = useRef<HTMLUListElement>(null);
     useEffect(() => {
