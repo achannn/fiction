@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
     @user_signed_in = user_signed_in?
   end
 
+  def action_cable_url
+    "wss:#{ENV.fetch("RENDER_EXTERNAL_HOSTNAME") { "localhost:3000" }}/cable"
+  end
+
   def record_not_found
     redirect_to root_path, status: :not_found
     logger
