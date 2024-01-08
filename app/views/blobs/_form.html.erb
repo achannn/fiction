@@ -1,4 +1,12 @@
 <%= form_with model: blob, url: url do |form| %>
+  <p>tips:</p>
+  <small>
+    <ul>
+      <li>keep each blob focused on one topic; it's better to have 3 blobs about 3 different things, than 1 blob about 3 things!</li>
+      <li>don't put any information you don't want users to be able to find out by asking! e.g. the culprit's name</li>
+    </ul>
+  </small>
+  <br>
   <div>
     <%= form.label :title %>
     <small>(this is for your reference only)</small>
