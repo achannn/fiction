@@ -24,7 +24,7 @@ class ChatResponder < ApplicationService
       response = client.chat(parameters: {
         model: "gpt-3.5-turbo",
         messages: messages,
-        max_tokens: token_count + 100,
+        max_tokens: 200,
       })
       response.dig("choices", 0, "message", "content")
     end
@@ -33,7 +33,7 @@ class ChatResponder < ApplicationService
   private
 
   def messages
-    @messages ||= [setup_message].push(*chat_history)
+    [setup_message].push(*chat_history)
   end
 
   def chat_history
@@ -51,14 +51,6 @@ class ChatResponder < ApplicationService
       end
     end
     messages
-  end
-
-  def token_count
-    count = 0
-    messages.each do |message|
-      count += OpenAI.rough_token_count(message[:content])
-    end
-    count
   end
 
   def question_embedding
@@ -82,7 +74,7 @@ class ChatResponder < ApplicationService
   def setup_message
     ret = {
       role: "system",
-      content: "Answer the questions based on the story below, if the question can't be answered, say 'I dont know'.
+      content: "Answer the questions based on the story below, if the question can't be answered, say 'I dont know'. Please keep the answer brief.
 
 ========================================================
 

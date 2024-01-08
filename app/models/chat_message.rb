@@ -4,7 +4,7 @@ class ChatMessage < ApplicationRecord
 
   after_create_commit :broadcast
 
-  validates :message, presence: true, length: {maximum: 500}
+  validates :message, presence: true, length: {maximum: 1000}
 
   def broadcast
     ChatsChannel.broadcast_to(chat, ChatsChannel::Message.new(

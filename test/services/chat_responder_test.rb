@@ -42,12 +42,12 @@ class ChatResponderTest < ActiveSupport::TestCase
     api_mock.expect(:chat, {"choices"=>[{"message"=>{"content"=>"reply"}}]}, parameters: {
       model: "gpt-3.5-turbo",
         messages: [
-        {role: "system", content: "Answer the questions based on the story below, if the question can't be answered, say 'I dont know'.\n\n========================================================\n\nHere is the story:\n\nchapter four body chapter three body chapter two body\n\n========================================================\n\nHere is extra information about the story:\n\nblob five body blob four body blob three body"},
+        {role: "system", content: "Answer the questions based on the story below, if the question can't be answered, say 'I dont know'. Please keep the answer brief.\n\n========================================================\n\nHere is the story:\n\nchapter four body chapter three body chapter two body\n\n========================================================\n\nHere is extra information about the story:\n\nblob five body blob four body blob three body"},
         {role: "user", content: "hello bot"},
         {role: "assistant", content: "hello human"},
         {role: "user", content: "how are you?"},
       ],
-        max_tokens: 189
+        max_tokens: 200
     })
 
     perform_enqueued_jobs do
