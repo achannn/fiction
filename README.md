@@ -5,6 +5,8 @@ the story's world and characters. This extra information is hidden from readers 
 discover during chatting.
 
 ## Architecture
+<img width="914" alt="Screenshot 2024-01-08 at 3 01 19 AM" src="https://github.com/achannn/fiction/assets/31633835/a63bd632-e7a7-441a-82ec-80815397b31d">
+
 * Writing/reading stories (+ chapters and blobs) is handled through regular CRUD operations using Rails
 * Authentication is handled using Devise
 * ChatWindow on the client is a React component, it connects to the Rails server via websockets (using ActionCable)
