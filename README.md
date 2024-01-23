@@ -42,12 +42,3 @@ question.
 
 More intelligent strategies can be used to increase the amount of cache hits but are out of scope here: 
 e.g. using "close-enough" embedding distances, chunking chapters and blobs
-
-## What I would do differently next time
-### React integration
-I chose to write only one component (chat) using React, and then mounted it into my Rails view. I did this because I already wrote
-all the views in Rails before using React.
-
-Next time, I would either write the whole frontend in React or use react_on_rails gem for specific components. Figuring
-out how to mount it was difficult and in the end I couldn't figure out how to unmount a component when browsing away from the page,
-resulting in a memory leak.
